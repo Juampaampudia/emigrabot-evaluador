@@ -23,12 +23,12 @@ const App: React.FC = () => {
   const currentLang = LANGUAGES.find(l => l.code === language) || LANGUAGES[0];
 
   return (
-    <div className="min-h-screen flex flex-col bg-background relative">
+    <div className="min-h-screen flex flex-col relative bg-gradient-hero">
       {/* Login Modal - Kept in codebase but triggers are currently deactivated */}
       {showProLogin && <ProLoginModal onClose={() => setShowProLogin(false)} />}
 
-      {/* Navbar - Updated to Corporate Dark Blue */}
-      <nav className="bg-primary border-b border-white/10 sticky top-0 z-50 shadow-md">
+      {/* Navbar */}
+      <nav className="bg-primary-dark/80 backdrop-blur-md border-b border-white/10 sticky top-0 z-50 shadow-lg">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between h-16">
             <div className="flex items-center gap-2 cursor-pointer" onClick={() => setCurrentView('chat')}>
@@ -156,29 +156,37 @@ const App: React.FC = () => {
       </nav>
 
       {/* Main Content */}
-      <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <main className="flex-1 w-full">
         {currentView === 'chat' && (
-          <div className="animate-fade-in space-y-6">
-            <div className="text-center max-w-2xl mx-auto mb-8">
-              <h1 className="text-3xl font-bold text-gray-900 sm:text-4xl mb-3">
+          <div className="animate-fade-in">
+            {/* Hero Section */}
+            <div className="text-center max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pt-12 pb-8">
+              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white mb-6 leading-tight tracking-tight">
                 {t('hero_title')}
               </h1>
-              <p className="text-lg text-text-secondary">
+              <p className="text-lg sm:text-xl text-gray-200 leading-relaxed max-w-3xl mx-auto">
                 {t('hero_subtitle')}
               </p>
             </div>
-            <EvaluatorChat onComplete={handleChatComplete} />
+
+            {/* Chat Section */}
+            <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 pb-8">
+              <EvaluatorChat onComplete={handleChatComplete} />
+            </div>
           </div>
         )}
 
         {currentView === 'results' && (
-          <div className="animate-fade-in space-y-6">
-             <div className="flex justify-between items-center max-w-4xl mx-auto mb-4">
-              <button onClick={() => setCurrentView('chat')} className="text-sm text-gray-500 hover:text-primary flex items-center gap-1">
+          <div className="animate-fade-in">
+             <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+              <button
+                onClick={() => setCurrentView('chat')}
+                className="text-sm text-white/80 hover:text-white flex items-center gap-2 mb-6 bg-white/10 hover:bg-white/20 backdrop-blur-sm px-4 py-2 rounded-lg transition-all"
+              >
                  ← {language === 'es' ? 'Volver' : 'Back'}
               </button>
+              <EvaluationResult />
              </div>
-            <EvaluationResult />
           </div>
         )}
 
@@ -213,9 +221,9 @@ const App: React.FC = () => {
       </main>
 
       {/* Footer */}
-      <footer className="bg-white border-t border-gray-200 mt-auto">
-        <div className="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
-          <p className="text-center text-sm text-gray-400">
+      <footer className="bg-primary-dark/60 backdrop-blur-md border-t border-white/10 mt-auto">
+        <div className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
+          <p className="text-center text-sm text-gray-300">
             {t('footer')}
           </p>
         </div>

@@ -70,6 +70,12 @@ Bot evaluador inteligente de casos de inmigración en España, potenciado por Go
 ## 📋 Versiones y Cambios Recientes
 
 ### Versión Actual (Enero 2026)
+- ✅ **Nuevo diseño UI mejorado**:
+  - Gradiente de fondo azul-dorado con efectos visuales
+  - Hero section con títulos grandes y llamativos
+  - Chat container con efecto glassmorphism/backdrop-blur
+  - Input con borde naranja destacado
+  - Animaciones suaves y transiciones fluidas
 - ✅ Título actualizado: "emigrAI BOT EVALUADOR"
 - ✅ API de Gemini configurada y funcionando
 - ✅ Despliegue en Vercel con variables de entorno

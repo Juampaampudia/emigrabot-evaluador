@@ -138,86 +138,101 @@ export const EvaluatorChat: React.FC<EvaluatorChatProps> = ({ onComplete }) => {
   };
 
   return (
-    <Card className="w-full max-w-3xl mx-auto h-[600px] flex flex-col overflow-hidden shadow-xl border-0 relative">
+    <div className="w-full max-w-4xl mx-auto">
       {/* Voice Assistant Overlay */}
       {isVoiceMode && (
-          <VoiceAssistant 
-            onClose={() => setIsVoiceMode(false)} 
+          <VoiceAssistant
+            onClose={() => setIsVoiceMode(false)}
             onComplete={onComplete}
           />
       )}
 
-      <div className="bg-primary p-4 flex items-center justify-between text-white">
-        <div className="flex items-center gap-3">
-            <div className="p-2 bg-white/20 rounded-full">
-            <Bot className="w-6 h-6" />
-            </div>
-            <div>
-            <h3 className="font-bold">{t('nav_evaluator')}</h3>
-            <p className="text-xs text-blue-100 flex items-center gap-1">
-                <span className="w-2 h-2 bg-accent rounded-full animate-pulse"/> {language === 'es' ? 'En línea' : 'Online'} (Gemini 2.5)
-            </p>
-            </div>
-        </div>
-        
-        <Button 
-            size="sm" 
-            className="bg-secondary hover:bg-secondary/90 text-white border-0"
-            onClick={() => setIsVoiceMode(true)}
-        >
-            <Headphones size={16} className="mr-2" />
-            {t('voice_start')}
-        </Button>
-      </div>
-
-      <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-gray-50" ref={scrollRef}>
-        {messages.map((msg) => (
-          <div key={msg.id} className={cn("flex gap-3", msg.role === 'user' ? "flex-row-reverse" : "")}>
-            <div className={cn(
-              "w-8 h-8 rounded-full flex items-center justify-center shrink-0",
-              msg.role === 'bot' ? "bg-primary text-white" : "bg-gray-300 text-gray-600"
-            )}>
-              {msg.role === 'bot' ? <Bot size={16} /> : <User size={16} />}
-            </div>
-            <div className={cn(
-              "max-w-[80%] p-3 rounded-2xl text-sm shadow-sm",
-              msg.role === 'bot' ? "bg-white text-text-primary rounded-tl-none" : "bg-primary text-white rounded-tr-none"
-            )}>
-              {msg.content}
-              <div className={cn("text-[10px] mt-1 opacity-70", msg.role === 'user' ? "text-right" : "")}>
-                {msg.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+      {/* Chat Container with Glassmorphism */}
+      <Card className="flex flex-col overflow-hidden shadow-2xl border border-white/20 bg-white/10 backdrop-blur-xl rounded-2xl h-[650px] relative">
+        {/* Chat Header */}
+        <div className="bg-primary/90 backdrop-blur-sm p-4 sm:p-5 flex items-center justify-between text-white border-b border-white/10">
+          <div className="flex items-center gap-3">
+              <div className="p-2.5 bg-white/20 rounded-full">
+                <Bot className="w-6 h-6 sm:w-7 sm:h-7" />
               </div>
-            </div>
+              <div>
+                <h3 className="font-bold text-base sm:text-lg">{t('nav_evaluator')}</h3>
+                <p className="text-xs sm:text-sm text-gray-200 flex items-center gap-1.5">
+                  <span className="w-2 h-2 bg-accent rounded-full animate-pulse"/>
+                  {language === 'es' ? 'En línea' : 'Online'} (Gemini 2.5)
+                </p>
+              </div>
           </div>
-        ))}
-        {isTyping && (
-          <div className="flex gap-3">
-             <div className="w-8 h-8 rounded-full bg-primary text-white flex items-center justify-center shrink-0"><Bot size={16} /></div>
-             <div className="bg-white p-3 rounded-2xl rounded-tl-none shadow-sm flex gap-1 items-center">
-               <span className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"/>
-               <span className="w-2 h-2 bg-gray-400 rounded-full animate-bounce delay-100"/>
-               <span className="w-2 h-2 bg-gray-400 rounded-full animate-bounce delay-200"/>
-             </div>
-          </div>
-        )}
-      </div>
 
-      <div className="p-4 bg-white border-t">
-        <div className="flex gap-2">
-          <input
-            type="text"
-            value={input}
-            onChange={(e) => setInput(e.target.value)}
-            onKeyDown={(e) => e.key === 'Enter' && handleSend()}
-            placeholder={t('chat_placeholder')}
-            disabled={isTyping}
-            className="flex-1 bg-gray-100 border-0 rounded-lg px-4 focus:ring-2 focus:ring-primary focus:outline-none"
-          />
-          <Button onClick={() => handleSend()} disabled={isTyping || !input.trim()}>
-            <Send size={18} />
+          <Button
+              size="sm"
+              className="bg-secondary hover:bg-secondary-hover text-white border-0 font-semibold shadow-lg hover:shadow-xl transition-all"
+              onClick={() => setIsVoiceMode(true)}
+          >
+              <Headphones size={16} className="mr-2" />
+              {t('voice_start')}
           </Button>
         </div>
-      </div>
-    </Card>
+
+        {/* Messages Area */}
+        <div className="flex-1 overflow-y-auto p-4 sm:p-6 space-y-4 bg-gradient-to-b from-transparent via-white/5 to-white/10" ref={scrollRef}>
+          {messages.map((msg) => (
+            <div key={msg.id} className={cn("flex gap-3 animate-slide-up", msg.role === 'user' ? "flex-row-reverse" : "")}>
+              <div className={cn(
+                "w-9 h-9 rounded-full flex items-center justify-center shrink-0 shadow-md",
+                msg.role === 'bot' ? "bg-primary-dark text-white" : "bg-gray-200 text-gray-700"
+              )}>
+                {msg.role === 'bot' ? <Bot size={18} /> : <User size={18} />}
+              </div>
+              <div className={cn(
+                "max-w-[75%] p-3.5 rounded-2xl text-sm shadow-lg backdrop-blur-sm",
+                msg.role === 'bot'
+                  ? "bg-gray-700/70 text-white rounded-tl-none border border-gray-600/30"
+                  : "bg-primary text-white rounded-tr-none"
+              )}>
+                {msg.content}
+                <div className={cn("text-[10px] mt-1.5 opacity-70", msg.role === 'user' ? "text-right" : "")}>
+                  {msg.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                </div>
+              </div>
+            </div>
+          ))}
+          {isTyping && (
+            <div className="flex gap-3 animate-slide-up">
+               <div className="w-9 h-9 rounded-full bg-primary-dark text-white flex items-center justify-center shrink-0 shadow-md">
+                 <Bot size={18} />
+               </div>
+               <div className="bg-gray-700/70 backdrop-blur-sm p-3.5 rounded-2xl rounded-tl-none shadow-lg flex gap-1.5 items-center border border-gray-600/30">
+                 <span className="w-2 h-2 bg-gray-300 rounded-full animate-bounce"/>
+                 <span className="w-2 h-2 bg-gray-300 rounded-full animate-bounce" style={{animationDelay: '0.1s'}}/>
+                 <span className="w-2 h-2 bg-gray-300 rounded-full animate-bounce" style={{animationDelay: '0.2s'}}/>
+               </div>
+            </div>
+          )}
+        </div>
+
+        {/* Input Area */}
+        <div className="p-4 sm:p-5 bg-primary-dark/80 backdrop-blur-md border-t border-white/10">
+          <div className="flex gap-3 p-1 bg-primary-dark rounded-xl border-2 border-secondary shadow-2xl">
+            <input
+              type="text"
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
+              onKeyDown={(e) => e.key === 'Enter' && handleSend()}
+              placeholder={t('chat_placeholder')}
+              disabled={isTyping}
+              className="flex-1 bg-transparent border-0 rounded-lg px-4 py-3 text-white placeholder-gray-400 focus:outline-none text-sm sm:text-base"
+            />
+            <Button
+              onClick={() => handleSend()}
+              disabled={isTyping || !input.trim()}
+              className="bg-gray-600 hover:bg-gray-500 text-white border-0 rounded-lg px-4 py-2 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+            >
+              <Send size={20} />
+            </Button>
+          </div>
+        </div>
+      </Card>
+    </div>
   );
 };
