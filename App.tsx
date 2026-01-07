@@ -89,15 +89,15 @@ const App: React.FC = () => {
                 )}
               </div>
 
-              {/* Area Profesional - Inactivo por solicitud */}
-              <Button 
-                size="sm" 
-                variant="secondary" 
+              {/* Área Profesional - Oculto temporalmente (futuras fases) */}
+              {/* <Button
+                size="sm"
+                variant="secondary"
                 className="font-bold opacity-50 cursor-not-allowed"
                 disabled
               >
                 {t('nav_professional')}
-              </Button>
+              </Button> */}
             </div>
 
             {/* Mobile Menu Button */}
@@ -143,13 +143,13 @@ const App: React.FC = () => {
               >
                 {t('nav_management')}
               </button> */}
-              {/* Area Profesional Mobile - Inactivo */}
-              <button
+              {/* Área Profesional Mobile - Oculto temporalmente (futuras fases) */}
+              {/* <button
                 disabled
                 className="block w-full text-left px-3 py-2 rounded-md text-base font-medium text-gray-400 opacity-50 cursor-not-allowed"
               >
                 {t('nav_professional')}
-              </button>
+              </button> */}
             </div>
           </div>
         )}

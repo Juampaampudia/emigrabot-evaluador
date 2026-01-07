@@ -73,17 +73,20 @@ Bot evaluador inteligente de casos de inmigración en España, potenciado por Go
 - ✅ Título actualizado: "emigrAI BOT EVALUADOR"
 - ✅ API de Gemini configurada y funcionando
 - ✅ Despliegue en Vercel con variables de entorno
-- ⚠️ **Botón "Gestión" desactivado temporalmente**:
-  - El dashboard de gestión de casos está oculto en la navegación
-  - Esta funcionalidad está reservada para agencias y versión profesional
-  - La versión actual está optimizada para usuarios finales (inmigrantes)
+- ⚠️ **Navegación simplificada para usuarios finales**:
+  - Botón "Gestión" oculto (funcionalidad reservada para agencias)
+  - Botón "Área Profesional" oculto (se implementará en futuras fases)
+  - Interfaz optimizada para inmigrantes que buscan evaluación de casos
 
 ### Funcionalidades Activas
-- ✅ Bot Evaluador (Chat conversacional)
-- ✅ Resultados de Evaluación con PDF
-- ✅ Selector de idiomas
-- ⏸️ Área Profesional (desactivado - próxima fase)
-- 🔒 Gestión de Casos (oculto - solo para agencias)
+- ✅ **Bot Evaluador**: Chat conversacional con IA
+- ✅ **Resultados de Evaluación**: Análisis completo con score de viabilidad
+- ✅ **Exportación a PDF**: Genera informes descargables
+- ✅ **Selector de idiomas**: 6 idiomas disponibles (ES, EN, FR, DE, PT, AR)
+
+### Funcionalidades Desactivadas (Próximas Fases)
+- 🔒 **Gestión de Casos**: Dashboard para agencias (oculto)
+- 🔒 **Área Profesional**: Login y funciones avanzadas (oculto)
 
 ## 📁 Estructura del Proyecto
 
