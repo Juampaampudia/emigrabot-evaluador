@@ -1,0 +1,7 @@
+{
+  "name": "EMIGRAI 360_15Dic",
+  "description": "An AI-powered immigration viability evaluator and case management dashboard for Spanish immigration processes.",
+  "requestFramePermissions": [
+    "microphone"
+  ]
+}
