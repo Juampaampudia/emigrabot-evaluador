@@ -40,21 +40,22 @@ const App: React.FC = () => {
 
             {/* Desktop Nav */}
             <div className="hidden md:flex items-center gap-6">
-              <button 
+              <button
                 onClick={() => setCurrentView('chat')}
                 className={`flex items-center gap-2 text-sm font-medium transition-colors ${currentView === 'chat' || currentView === 'results' ? 'text-white' : 'text-blue-200 hover:text-white'}`}
               >
                 <Bot size={18} />
                 {t('nav_evaluator')}
               </button>
-              <button 
+              {/* Gestión - Desactivado temporalmente (solo para agencias) */}
+              {/* <button
                 onClick={() => setCurrentView('dashboard')}
                 className={`flex items-center gap-2 text-sm font-medium transition-colors ${currentView === 'dashboard' ? 'text-white' : 'text-blue-200 hover:text-white'}`}
               >
                 <LayoutDashboard size={18} />
                 {t('nav_management')}
-              </button>
-              
+              </button> */}
+
               <div className="h-6 w-px bg-white/20 mx-2"></div>
               
               {/* Language Dropdown */}
@@ -135,12 +136,13 @@ const App: React.FC = () => {
               >
                 {t('nav_evaluator')}
               </button>
-              <button
+              {/* Gestión - Desactivado temporalmente (solo para agencias) */}
+              {/* <button
                 onClick={() => { setCurrentView('dashboard'); setIsMobileMenuOpen(false); }}
                 className="block w-full text-left px-3 py-2 rounded-md text-base font-medium text-blue-100 hover:text-white hover:bg-white/10"
               >
                 {t('nav_management')}
-              </button>
+              </button> */}
               {/* Area Profesional Mobile - Inactivo */}
               <button
                 disabled
