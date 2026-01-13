@@ -63,8 +63,15 @@ export const EvaluatorChat: React.FC<EvaluatorChatProps> = ({ onComplete }) => {
       
       The user has seen your greeting. Wait for their nationality.
       Ask questions ONE BY ONE. Do not overwhelm.
-      Key questions: 1. Time in Spain, 2. Status (tourist/illegal/student), 3. Job offer/funds, 4. Criminal record.
+      Interview flow (never skip steps):
+        1. Time in Spain.
+        2. LEGAL STATUS DEEP DIVE: always confirm the exact permit/visa (tourist, irregular, student, arraigo, etc.), whether it is valid or expired, and when it expires.
+           - Ask follow-up questions until you have a precise picture of their legal situation before moving to any other topic.
+           - If the answer is vague, explicitly ask for clarifications (type of document, expiry date, if they are overstaying, etc.).
+        3. Job offer/funds.
+        4. Criminal record.
       Keep a professional but warm tone.
+      Summaries must explicitly mention the legal status you gathered.
       When you have the info, call 'complete_evaluation'.
     `;
 

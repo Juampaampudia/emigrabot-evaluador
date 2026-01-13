@@ -7,11 +7,23 @@ import { cn } from '../../lib/utils';
 import { jsPDF } from "jspdf";
 import { useLanguage } from '../../lib/LanguageContext';
 
+type DocStatus = 'ready' | 'warning' | 'pending';
+
+const REQUIRED_DOCS: { name: string; status: DocStatus; note: string }[] = [
+  { name: 'Pasaporte Completo', status: 'ready', note: 'Recibido' },
+  { name: 'Antecedentes Penales', status: 'warning', note: 'Apostilla' },
+  { name: 'Contrato de Trabajo', status: 'pending', note: 'Pendiente' },
+  { name: 'Informe de Insercion Social', status: 'pending', note: 'Pendiente' },
+  { name: 'Empadronamiento Historico', status: 'warning', note: 'Actualizar' },
+  { name: 'Oferta Laboral Sellada', status: 'pending', note: 'Falta firma' },
+  { name: 'Medios Economicos', status: 'pending', note: 'Adjuntar' },
+  { name: 'Fotografias DNI', status: 'ready', note: 'OK' }
+];
+
 export const EvaluationResult: React.FC = () => {
   const { t } = useLanguage();
 
   const handleContact = () => {
-    // Redirige al cliente de correo para simular contacto real
     const subject = encodeURIComponent("Consulta sobre Arraigo Social - Ref #EM-2024-8821");
     window.location.href = `mailto:citas@emigrai360.com?subject=${subject}`;
   };
@@ -19,52 +31,104 @@ export const EvaluationResult: React.FC = () => {
   const handleDownload = () => {
     try {
       const doc = new jsPDF();
-      
-      // Header Branding - Corporate Blue
-      doc.setFillColor(11, 47, 79); 
-      doc.rect(0, 0, 210, 40, 'F');
+      const pageWidth = doc.internal.pageSize.getWidth();
+      const pageHeight = doc.internal.pageSize.getHeight();
+      const marginX = 20;
+      const marginY = 20;
+      const contentWidth = pageWidth - marginX * 2;
+
+      // Header
+      doc.setFillColor(11, 47, 79);
+      doc.rect(0, 0, pageWidth, 35, 'F');
       doc.setTextColor(255, 255, 255);
       doc.setFont("helvetica", "bold");
       doc.setFontSize(22);
-      doc.text("emigrAI", 20, 25);
+      doc.text("emigrAI", marginX, 23);
       doc.setFont("helvetica", "normal");
       doc.setFontSize(12);
-      doc.text("Informe de Viabilidad / Viability Report", 140, 25);
+      doc.text("Informe de Viabilidad / Viability Report", pageWidth - marginX, 23, { align: "right" } as any);
 
-      // Info Basic
+      // Basic info
+      let cursorY = marginY + 30;
       doc.setTextColor(0, 0, 0);
       doc.setFontSize(10);
-      doc.text(`Fecha: ${new Date().toLocaleDateString()}`, 20, 50);
-      doc.text("Referencia: #EM-2024-8821", 140, 50);
+      doc.text(`Fecha: ${new Date().toLocaleDateString()}`, marginX, cursorY);
+      doc.text("Referencia: #EM-2024-8821", pageWidth - marginX, cursorY, { align: "right" } as any);
 
-      // Result Section
-      doc.setFontSize(18);
+      // Result title
+      cursorY += 20;
+      doc.setFontSize(16);
       doc.setFont("helvetica", "bold");
-      doc.text("Resultado / Result", 20, 70);
-      
-      // Score Box
-      doc.setFillColor(240, 253, 244); // Light Green bg
-      doc.setDrawColor(22, 163, 74); // Green border
-      doc.roundedRect(20, 80, 170, 35, 3, 3, 'FD');
-      
-      doc.setTextColor(22, 101, 52); // Dark Green text
+      doc.text("Resultado / Result", marginX, cursorY);
+
+      // Score box
+      cursorY += 10;
+      doc.setFillColor(240, 253, 244);
+      doc.setDrawColor(22, 163, 74);
+      doc.roundedRect(marginX, cursorY, contentWidth, 32, 3, 3, 'FD');
+      doc.setTextColor(22, 101, 52);
       doc.setFontSize(14);
-      doc.text("VIABILIDAD ALTA / HIGH VIABILITY (87%)", 30, 95);
+      doc.text("VIABILIDAD ALTA / HIGH VIABILITY (87%)", marginX + 10, cursorY + 20);
 
       // Details
+      cursorY += 50;
       doc.setFont("helvetica", "bold");
-      doc.setTextColor(0,0,0);
-      doc.text("Detalles / Details:", 20, 135);
+      doc.setTextColor(0, 0, 0);
+      doc.text("Detalles / Details:", marginX, cursorY);
       doc.setFont("helvetica", "normal");
       doc.setFontSize(11);
-      doc.text("- 3-4 Months / Meses", 30, 145);
-      doc.text("- Cost: 800€ - 1.2k€", 30, 155);
-      doc.text("- Docs: 8", 30, 165);
+      const detailLines = [
+        "- 3-4 Months / Meses",
+        "- Cost: 800 EUR - 1.2k EUR",
+        `- Docs: ${REQUIRED_DOCS.length}`
+      ];
+      detailLines.forEach((line, idx) => {
+        doc.text(line, marginX + 10, cursorY + 10 + idx * 8);
+      });
+
+      // Documents
+      cursorY += 40;
+      doc.setFont("helvetica", "bold");
+      doc.setFontSize(12);
+      doc.text("Documentos requeridos / Required documents:", marginX, cursorY);
+      doc.setFont("helvetica", "normal");
+      doc.setFontSize(10);
+      let docY = cursorY + 8;
+      REQUIRED_DOCS.forEach((docItem) => {
+        if (docY > pageHeight - marginY - 20) {
+          doc.addPage();
+          docY = marginY;
+        }
+        const statusLabel = docItem.status === 'ready' ? 'Completado' : docItem.note;
+        doc.text(`- ${docItem.name} (${statusLabel})`, marginX, docY);
+        docY += 6;
+      });
+
+      const pendingDocs = REQUIRED_DOCS.filter(d => d.status !== 'ready');
+      if (pendingDocs.length) {
+        docY += 4;
+        if (docY > pageHeight - marginY - 20) {
+          doc.addPage();
+          docY = marginY;
+        }
+        doc.setFont("helvetica", "bold");
+        doc.text("Documentos pendientes / Missing documents:", marginX, docY);
+        doc.setFont("helvetica", "normal");
+        docY += 6;
+        pendingDocs.forEach((docItem) => {
+          if (docY > pageHeight - marginY - 20) {
+            doc.addPage();
+            docY = marginY;
+          }
+          doc.text(`- ${docItem.name} (${docItem.note})`, marginX, docY);
+          docY += 6;
+        });
+      }
 
       // Disclaimer
       doc.setFontSize(9);
       doc.setTextColor(128, 128, 128);
-      doc.text("Generated by AI / Generado por IA.", 20, 280);
+      doc.text("Generated by AI / Generado por IA.", marginX, pageHeight - marginY);
 
       doc.save("emigrai360-report.pdf");
     } catch (error) {
@@ -76,14 +140,12 @@ export const EvaluationResult: React.FC = () => {
   return (
     <Card className="w-full max-w-4xl mx-auto overflow-hidden animate-fade-in border-0 shadow-2xl">
       <div className="bg-success-gradient p-1 h-2 w-full" />
-      
+
       <div className="grid md:grid-cols-3 gap-0">
-        {/* Columna Izquierda: Score */}
         <div className="md:col-span-1 bg-gray-50 p-8 flex flex-col items-center justify-center border-b md:border-b-0 md:border-r border-gray-100">
           <div className="relative w-40 h-40 flex items-center justify-center">
-            {/* CSS Gauge Mock */}
             <div className="absolute inset-0 rounded-full border-[10px] border-gray-200"></div>
-            <div 
+            <div
               className="absolute inset-0 rounded-full border-[10px] border-accent border-l-transparent border-b-transparent transform -rotate-45 transition-all duration-1000"
               style={{ clipPath: 'polygon(0 0, 100% 0, 100% 100%, 0% 100%)' }}
             ></div>
@@ -92,7 +154,7 @@ export const EvaluationResult: React.FC = () => {
               <p className="text-xs text-gray-500 uppercase font-semibold mt-1">{t('res_viability')}</p>
             </div>
           </div>
-          
+
           <div className="mt-6 text-center">
             <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-green-100 text-green-700 text-sm font-bold">
               <CheckCircle2 size={14} /> {t('res_probability_high')}
@@ -103,7 +165,6 @@ export const EvaluationResult: React.FC = () => {
           </div>
         </div>
 
-        {/* Columna Derecha: Detalles */}
         <div className="md:col-span-2 p-8">
           <div className="flex justify-between items-start mb-6">
             <div>
@@ -129,36 +190,37 @@ export const EvaluationResult: React.FC = () => {
                 <Euro size={16} />
                 <span className="text-xs font-bold uppercase">{t('res_cost')}</span>
               </div>
-              <p className="font-semibold text-gray-900">800€ - 1.2k€</p>
+              <p className="font-semibold text-gray-900">800 EUR - 1.2k EUR</p>
             </div>
             <div className="p-3 bg-orange-50 rounded-lg">
               <div className="flex items-center gap-2 text-orange-600 mb-1">
                 <FileText size={16} />
                 <span className="text-xs font-bold uppercase">{t('res_docs')}</span>
               </div>
-              <p className="font-semibold text-gray-900">8 {t('res_docs_req')}</p>
+              <p className="font-semibold text-gray-900">{REQUIRED_DOCS.length} {t('res_docs_req')}</p>
             </div>
           </div>
 
           <div className="space-y-4">
             <h4 className="font-semibold text-sm text-gray-900 uppercase tracking-wide">{t('res_crit_docs')}</h4>
             <div className="space-y-2">
-              {[
-                { name: 'Pasaporte Completo', status: 'ready', msg: 'OK' },
-                { name: 'Antecedentes Penales', status: 'warning', msg: 'Apostilla' },
-                { name: 'Contrato', status: 'pending', msg: 'Pending' },
-              ].map((doc, i) => (
-                <div key={i} className="flex items-center justify-between p-3 border rounded-md bg-white hover:bg-gray-50 transition">
+              {REQUIRED_DOCS.map((doc, i) => (
+                <div key={doc.name + i} className="flex items-center justify-between p-3 border rounded-md bg-white hover:bg-gray-50 transition">
                   <div className="flex items-center gap-3">
                     <FileText size={18} className="text-gray-400" />
                     <span className="text-sm font-medium text-gray-700">{doc.name}</span>
                   </div>
-                  <span className={cn(
-                    "text-xs px-2 py-0.5 rounded-full font-medium",
-                    doc.status === 'ready' ? "bg-green-100 text-green-700" :
-                    doc.status === 'warning' ? "bg-yellow-100 text-yellow-700" : "bg-gray-100 text-gray-600"
-                  )}>
-                    {doc.msg}
+                  <span
+                    className={cn(
+                      "text-xs px-2 py-0.5 rounded-full font-medium",
+                      doc.status === 'ready'
+                        ? "bg-green-100 text-green-700"
+                        : doc.status === 'warning'
+                        ? "bg-yellow-100 text-yellow-700"
+                        : "bg-gray-100 text-gray-600"
+                    )}
+                  >
+                    {doc.note}
                   </span>
                 </div>
               ))}
