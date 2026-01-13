@@ -159,7 +159,7 @@ export const EvaluatorChat: React.FC<EvaluatorChatProps> = ({ onComplete }) => {
                 <h3 className="font-bold text-base sm:text-lg">{t('nav_evaluator')}</h3>
                 <p className="text-xs sm:text-sm text-gray-200 flex items-center gap-1.5">
                   <span className="w-2 h-2 bg-accent rounded-full animate-pulse"/>
-                  {language === 'es' ? 'En línea' : 'Online'} (Gemini 2.5)
+                  {language === 'es' ? 'En línea' : 'Online'}
                 </p>
               </div>
           </div>

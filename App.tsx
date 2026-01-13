@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { EvaluatorChat } from './components/features/EvaluatorChat';
 import { EvaluationResult } from './components/features/EvaluationResult';
 import { CaseList } from './components/dashboard/CaseList';
-import { Bot, LayoutDashboard, Sparkles, Menu, X, Globe, ChevronDown } from 'lucide-react';
+import { Bot, LayoutDashboard, Sparkles, Globe, ChevronDown } from 'lucide-react';
 import { Button } from './components/ui/Button';
 import { useLanguage, LANGUAGES } from './lib/LanguageContext';
 import { ProLoginModal } from './components/features/ProLoginModal';
@@ -11,8 +11,8 @@ type View = 'chat' | 'results' | 'dashboard';
 
 const App: React.FC = () => {
   const [currentView, setCurrentView] = useState<View>('chat');
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isLangMenuOpen, setIsLangMenuOpen] = useState(false);
+  const [isMobileLangMenuOpen, setIsMobileLangMenuOpen] = useState(false);
   const [showProLogin, setShowProLogin] = useState(false);
   const { language, setLanguage, t } = useLanguage();
 
@@ -40,38 +40,20 @@ const App: React.FC = () => {
 
             {/* Desktop Nav */}
             <div className="hidden md:flex items-center gap-6">
-              <button
-                onClick={() => setCurrentView('chat')}
-                className={`flex items-center gap-2 text-sm font-medium transition-colors ${currentView === 'chat' || currentView === 'results' ? 'text-white' : 'text-blue-200 hover:text-white'}`}
-              >
-                <Bot size={18} />
-                {t('nav_evaluator')}
-              </button>
-              {/* Gestión - Desactivado temporalmente (solo para agencias) */}
-              {/* <button
-                onClick={() => setCurrentView('dashboard')}
-                className={`flex items-center gap-2 text-sm font-medium transition-colors ${currentView === 'dashboard' ? 'text-white' : 'text-blue-200 hover:text-white'}`}
-              >
-                <LayoutDashboard size={18} />
-                {t('nav_management')}
-              </button> */}
-
-              <div className="h-6 w-px bg-white/20 mx-2"></div>
-              
               {/* Language Dropdown */}
               <div className="relative">
-                <button 
+                <button
                   onClick={() => setIsLangMenuOpen(!isLangMenuOpen)}
                   onBlur={() => setTimeout(() => setIsLangMenuOpen(false), 200)}
                   className="flex items-center gap-2 text-sm font-bold text-white bg-white/10 hover:bg-white/20 px-3 py-1.5 rounded-full transition-colors"
                 >
-                  <span className="text-lg">{currentLang.flag}</span>
+                  <Globe size={16} className="text-secondary" />
                   <span className="uppercase">{currentLang.code}</span>
                   <ChevronDown size={14} className={`transition-transform ${isLangMenuOpen ? 'rotate-180' : ''}`} />
                 </button>
                 
                 {isLangMenuOpen && (
-                  <div className="absolute top-full right-0 mt-2 w-48 bg-white rounded-lg shadow-xl border border-gray-100 py-1 z-50 overflow-hidden animate-fade-in">
+                  <div className="absolute top-full right-0 mt-2 w-52 bg-white rounded-lg shadow-xl border border-gray-100 py-1 z-50 overflow-hidden animate-fade-in">
                     {LANGUAGES.map((lang) => (
                       <button
                         key={lang.code}
@@ -79,9 +61,11 @@ const App: React.FC = () => {
                           setLanguage(lang.code);
                           setIsLangMenuOpen(false);
                         }}
-                        className={`w-full text-left px-4 py-2 text-sm hover:bg-gray-50 flex items-center gap-3 ${language === lang.code ? 'bg-blue-50 text-primary font-bold' : 'text-gray-700'}`}
+                        className={`w-full text-left px-4 py-2.5 text-sm hover:bg-gray-50 flex items-center gap-3 transition-colors ${language === lang.code ? 'bg-blue-50 text-primary font-bold' : 'text-gray-700'}`}
                       >
-                        <span className="text-lg">{lang.flag}</span>
+                        <span className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold ${language === lang.code ? 'bg-primary text-white' : 'bg-gray-100 text-gray-600'}`}>
+                          {lang.code.toUpperCase()}
+                        </span>
                         <span>{lang.name}</span>
                       </button>
                     ))}
@@ -103,56 +87,39 @@ const App: React.FC = () => {
             {/* Mobile Menu Button */}
             <div className="flex items-center md:hidden gap-3">
                {/* Mobile Lang Selector */}
-               <button 
-                  onClick={() => {
-                    // Simple cycle for mobile
-                    const currentIndex = LANGUAGES.findIndex(l => l.code === language);
-                    const nextIndex = (currentIndex + 1) % LANGUAGES.length;
-                    setLanguage(LANGUAGES[nextIndex].code);
-                  }}
-                  className="text-white font-bold text-sm bg-white/10 px-2 py-1 rounded flex items-center gap-1"
-                >
-                  <span>{currentLang.flag}</span>
-                  <span className="uppercase">{currentLang.code}</span>
-                </button>
+               <div className="relative">
+                 <button
+                    onClick={() => setIsMobileLangMenuOpen(!isMobileLangMenuOpen)}
+                    className="text-white font-bold text-sm bg-white/10 px-2 py-1 rounded flex items-center gap-1.5"
+                  >
+                    <Globe size={14} className="text-secondary" />
+                    <span className="uppercase">{currentLang.code}</span>
+                  </button>
 
-              <button 
-                onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-                className="p-2 rounded-md text-blue-200 hover:text-white hover:bg-white/10 focus:outline-none"
-              >
-                {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
-              </button>
+                  {isMobileLangMenuOpen && (
+                    <div className="absolute top-full right-0 mt-2 w-52 bg-white rounded-lg shadow-xl border border-gray-100 py-1 z-50 overflow-hidden animate-fade-in">
+                      {LANGUAGES.map((lang) => (
+                        <button
+                          key={lang.code}
+                          onClick={() => {
+                            setLanguage(lang.code);
+                            setIsMobileLangMenuOpen(false);
+                          }}
+                          className={`w-full text-left px-4 py-2.5 text-sm hover:bg-gray-50 flex items-center gap-3 transition-colors ${language === lang.code ? 'bg-blue-50 text-primary font-bold' : 'text-gray-700'}`}
+                        >
+                          <span className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold ${language === lang.code ? 'bg-primary text-white' : 'bg-gray-100 text-gray-600'}`}>
+                            {lang.code.toUpperCase()}
+                          </span>
+                          <span>{lang.name}</span>
+                        </button>
+                      ))}
+                    </div>
+                  )}
+               </div>
             </div>
           </div>
         </div>
 
-        {/* Mobile Nav */}
-        {isMobileMenuOpen && (
-          <div className="md:hidden border-t border-white/10 bg-primary">
-            <div className="px-2 pt-2 pb-3 space-y-1">
-              <button
-                onClick={() => { setCurrentView('chat'); setIsMobileMenuOpen(false); }}
-                className="block w-full text-left px-3 py-2 rounded-md text-base font-medium text-blue-100 hover:text-white hover:bg-white/10"
-              >
-                {t('nav_evaluator')}
-              </button>
-              {/* Gestión - Desactivado temporalmente (solo para agencias) */}
-              {/* <button
-                onClick={() => { setCurrentView('dashboard'); setIsMobileMenuOpen(false); }}
-                className="block w-full text-left px-3 py-2 rounded-md text-base font-medium text-blue-100 hover:text-white hover:bg-white/10"
-              >
-                {t('nav_management')}
-              </button> */}
-              {/* Área Profesional Mobile - Oculto temporalmente (futuras fases) */}
-              {/* <button
-                disabled
-                className="block w-full text-left px-3 py-2 rounded-md text-base font-medium text-gray-400 opacity-50 cursor-not-allowed"
-              >
-                {t('nav_professional')}
-              </button> */}
-            </div>
-          </div>
-        )}
       </nav>
 
       {/* Main Content */}
