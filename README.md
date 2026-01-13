@@ -5,11 +5,12 @@ Bot evaluador inteligente de casos de inmigración en España, potenciado por Go
 ## 🌟 Características
 
 - ✅ **Evaluación Inteligente**: Análisis de viabilidad de casos de inmigración mediante IA
-- 🌍 **Multiidioma**: Soporte para 6 idiomas (ES, EN, FR, DE, PT, AR)
+- 🌍 **Multiidioma**: Soporte para 9 idiomas (Español, English, Français, العربية, Română, 中文, Português, Български, Українська)
 - 📊 **Score de Viabilidad**: Puntuación de 0-100 basada en el análisis del caso
 - 💬 **Chat Conversacional**: Interfaz amigable con preguntas guiadas
 - 📄 **Generación de PDF**: Exporta informes de evaluación en PDF
 - 🎨 **Diseño Responsivo**: Optimizado para desktop y móvil
+- 🌐 **Selector de Idiomas Mejorado**: Menú desplegable con códigos de país visibles
 
 ## 🚀 Despliegue
 
@@ -70,13 +71,24 @@ Bot evaluador inteligente de casos de inmigración en España, potenciado por Go
 ## 📋 Versiones y Cambios Recientes
 
 ### Versión Actual (Enero 2026)
+
+#### Última actualización - 13/01/2026
+- ✅ **Mejoras en navegación y UI**:
+  - Eliminado botón "Evaluador IA" de la navbar (decorativo, sin función)
+  - Eliminado botón de menú hamburguesa en móvil
+  - Selector de idiomas unificado para móvil y desktop con menú desplegable
+  - Reemplazadas banderas emoji por círculos con códigos de país (mejor compatibilidad entre navegadores)
+  - Título de pestaña actualizado a "emigrAI BOT EVALUADOR"
+  - Eliminado texto "(Gemini 2.5)" del indicador de estado en línea
+  - Soporte ampliado a 9 idiomas: ES, EN, FR, AR, RO, ZH, PT, BG, UK
+
+#### Versión anterior
 - ✅ **Nuevo diseño UI mejorado**:
   - Gradiente de fondo azul-dorado con efectos visuales
   - Hero section con títulos grandes y llamativos
   - Chat container con efecto glassmorphism/backdrop-blur
   - Input con borde naranja destacado
   - Animaciones suaves y transiciones fluidas
-- ✅ Título actualizado: "emigrAI BOT EVALUADOR"
 - ✅ API de Gemini configurada y funcionando
 - ✅ Despliegue en Vercel con variables de entorno
 - ⚠️ **Navegación simplificada para usuarios finales**:
@@ -88,7 +100,16 @@ Bot evaluador inteligente de casos de inmigración en España, potenciado por Go
 - ✅ **Bot Evaluador**: Chat conversacional con IA
 - ✅ **Resultados de Evaluación**: Análisis completo con score de viabilidad
 - ✅ **Exportación a PDF**: Genera informes descargables
-- ✅ **Selector de idiomas**: 6 idiomas disponibles (ES, EN, FR, DE, PT, AR)
+- ✅ **Selector de idiomas**: 9 idiomas disponibles con menú desplegable
+  - 🇪🇸 Español (ES)
+  - 🇬🇧 English (EN)
+  - 🇫🇷 Français (FR)
+  - 🇸🇦 العربية (AR)
+  - 🇷🇴 Română (RO)
+  - 🇨🇳 中文 (ZH)
+  - 🇵🇹 Português (PT)
+  - 🇧🇬 Български (BG)
+  - 🇺🇦 Українська (UK)
 
 ### Funcionalidades Desactivadas (Próximas Fases)
 - 🔒 **Gestión de Casos**: Dashboard para agencias (oculto)
@@ -111,7 +132,7 @@ emigraBOT_EVALUADOR/
 │       ├── Button.tsx              # Componente botón
 │       └── Card.tsx                # Componente tarjeta
 ├── lib/
-│   ├── LanguageContext.tsx         # Contexto multiidioma
+│   ├── LanguageContext.tsx         # Contexto multiidioma (9 idiomas)
 │   ├── audioUtils.ts               # Utilidades de audio
 │   └── utils.ts                    # Utilidades generales
 ├── types.ts                         # Tipos TypeScript
